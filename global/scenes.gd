@@ -1,10 +1,29 @@
-extends Node
+extends Node2D
+
+func _ready():
+	goto_start()
+
+func clear():
+	for child in get_children():
+		child.queue_free()
 
 func goto_start():
-	get_tree().change_scene_to_file("res://scenes/ui/start.tscn")
+	clear()
+	var start = preload("res://scenes/ui/start.tscn").instantiate()
+	add_child(start)
 
 func goto_level_select():
-	get_tree().change_scene_to_file("res://scenes/ui/select_level.tscn")
+	clear()
+	var select_level = preload("res://scenes/ui/select_level.tscn").instantiate()
+	add_child(select_level)
 
-func goto_level(level_name: String):
-	get_tree().change_scene_to_file("res://scenes/levels/" + level_name + ".tscn")
+func goto_credits():
+	clear()
+	var credits = preload("res://scenes/ui/credits.tscn").instantiate()
+	add_child(credits)
+
+func goto_level(level_data: LevelData):
+	clear()
+	var level = preload("res://scenes/level.tscn").instantiate()
+	level.level_data = level_data
+	add_child(level)
