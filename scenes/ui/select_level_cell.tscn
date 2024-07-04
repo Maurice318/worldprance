@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cv5sfua4e41yl"]
+[gd_scene load_steps=9 format=3 uid="uid://cv5sfua4e41yl"]
 
 [ext_resource type="TileSet" uid="uid://b85edn0lxsvdt" path="res://resources/frames.tres" id="1_so7vb"]
 [ext_resource type="Script" path="res://scenes/ui/select_level_cell.gd" id="1_w3utl"]
@@ -13,8 +13,6 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8ocbb"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h2uct"]
-
 [node name="SelectLevelCell" type="Control"]
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 3
@@ -26,7 +24,7 @@ script = ExtResource("1_w3utl")
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = ExtResource("1_so7vb")
 format = 2
-layer_0/tile_data = PackedInt32Array(0, 1, 5, 65536, 1, 6, 131072, 1, 7, 1, 65537, 5, 65537, 65537, 6, 131073, 65537, 7, 2, 131073, 5, 65538, 131073, 6, 131074, 131073, 7)
+layer_0/tile_data = PackedInt32Array(0, 1, 5, 65536, 1, 6, 131072, 1, 7, 1, 65537, 8, 65537, 65537, 6, 131073, 262145, 8, 2, 131073, 5, 65538, 131073, 6, 131074, 131073, 7)
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 2
@@ -56,7 +54,6 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_mdmlw")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_qwn6w")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_ig3qf")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_8ocbb")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_h2uct")
 
 [connection signal="focus_entered" from="Button" to="." method="_on_button_focus_entered"]
 [connection signal="focus_exited" from="Button" to="." method="_on_button_focus_exited"]
