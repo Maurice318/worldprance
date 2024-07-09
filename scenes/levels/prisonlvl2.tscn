@@ -98,7 +98,7 @@ on = true
 position = Vector2(240, 448)
 
 [node name="Door2" parent="ObjectsBehind" instance=ExtResource("7_lv5ys")]
-position = Vector2(528, 320)
+position = Vector2(529, 320)
 
 [node name="Labels" type="Node2D" parent="."]
 
