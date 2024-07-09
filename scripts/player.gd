@@ -52,12 +52,14 @@ func _physics_process(delta):
 		double_jumped = false
 		if Input.is_action_just_pressed(input_keys.jump):
 			velocity.y = JUMP_VELOCITY
+			Sounds.play_jump()
 	else:
 		velocity.y += gravity * delta
 		if !double_jumped:
 			if Input.is_action_just_pressed(input_keys.jump):
 				velocity.y += JUMP_VELOCITY
 				double_jumped = true
+				Sounds.play_jump()
 		
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -100,4 +102,7 @@ func _on_ladder_exited(_area: Area2D):
 
 func _on_danger_area_entered(_area: Area2D):
 	print_debug("danger")
+	dead = true
+
+func _on_enemy_area_entered(_area:Area2D):
 	dead = true

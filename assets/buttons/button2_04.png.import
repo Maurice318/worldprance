@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://xdjoheyr8wff"
-path="res://.godot/imported/empty_star.png-c3d24671516974e884d0a63ad73f3373.ctex"
+uid="uid://chynka7jlqug8"
+path="res://.godot/imported/button2_04.png-bcb22d18799e0114452d865e7ce743e6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/empty_star.png"
-dest_files=["res://.godot/imported/empty_star.png-c3d24671516974e884d0a63ad73f3373.ctex"]
+source_file="res://assets/buttons/button2_04.png"
+dest_files=["res://.godot/imported/button2_04.png-bcb22d18799e0114452d865e7ce743e6.ctex"]
 
 [params]
 
