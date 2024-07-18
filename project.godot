@@ -21,16 +21,16 @@ resources_spreadsheet_view/context_menu_on_leftclick=false
 [application]
 
 config/name="worldprance"
-run/main_scene="res://scenes/game_start.tscn"
+run/main_scene="res://scenes/root.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://assets/icon.svg"
 
 [autoload]
 
 State="*res://global/state.gd"
-Scenes="*res://global/scenes.gd"
 Sounds="*res://global/sounds.gd"
 Records="*res://global/records.gd"
+InputManager="*res://global/input_manager.gd"
 
 [display]
 
@@ -38,9 +38,13 @@ window/size/viewport_width=576
 window/size/viewport_height=324
 window/stretch/mode="canvas_items"
 
+[editor]
+
+export/convert_text_resources_to_binary=false
+
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/resources_spreadsheet_view/plugin.cfg")
+enabled=PackedStringArray("res://addons/resources_spreadsheet_view/plugin.cfg", "res://addons/virtual_joystick/plugin.cfg")
 
 [input]
 
@@ -141,4 +145,5 @@ dimension={
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
+textures/vram_compression/import_etc2_astc=true
 viewport/hdr_2d=true

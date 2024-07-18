@@ -6,9 +6,10 @@ class_name Player
 
 @onready var name_label = $NameLabel
 
-const SPEED = 225.0
-const JUMP_VELOCITY = -300.0
+const SPEED = 160.0
+const JUMP_VELOCITY = -310.0
 const LADDER_SPEED = 64.0
+const VERTICAL_MOVE_THRESHOLD = 0.5
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -24,9 +25,22 @@ func _ready():
 	load_player_data()
 	name_label.text = player_name
 
+	InputManager.jump.connect(func():
+		if is_on_floor():
+			velocity.y = JUMP_VELOCITY
+			double_jumped = false
+			Sounds.play_jump()
+		elif double_jumped == false:
+			velocity.y += JUMP_VELOCITY
+			double_jumped = true
+			Sounds.play_jump()
+	)
+
 func _physics_process(delta):
 	if dead:
 		return
+
+	# ladders
 	elif is_on_ladder > 0:
 		double_jumped = false
 		if is_on_floor():
@@ -35,35 +49,22 @@ func _physics_process(delta):
 			is_climbing = true
 
 		velocity.x = 0
-		var v_direction = Input.get_axis(input_keys.up, input_keys.down)
-		if v_direction < 0:
+		var v_direction = InputManager.get_direction().y
+
+		if v_direction < -VERTICAL_MOVE_THRESHOLD:
 			velocity.y = -LADDER_SPEED
 			global_position.x = ladder_position_x
-		elif v_direction > 0:
+		elif v_direction > VERTICAL_MOVE_THRESHOLD:
 			velocity.y = LADDER_SPEED
 			global_position.x = ladder_position_x
 		else:
 			velocity.y = 0.0
-
-		if Input.is_action_just_pressed(input_keys.jump):
-			velocity.y = JUMP_VELOCITY
-
-	elif is_on_floor():
-		double_jumped = false
-		if Input.is_action_just_pressed(input_keys.jump):
-			velocity.y = JUMP_VELOCITY
-			Sounds.play_jump()
 	else:
 		velocity.y += gravity * delta
-		if !double_jumped:
-			if Input.is_action_just_pressed(input_keys.jump):
-				velocity.y += JUMP_VELOCITY
-				double_jumped = true
-				Sounds.play_jump()
-		
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction = Input.get_axis(input_keys.left, input_keys.right)
+
+	# running
+	var direction = InputManager.get_direction().x
+
 	if direction:
 		velocity.x = direction * SPEED
 	else:
@@ -72,10 +73,12 @@ func _physics_process(delta):
 	move_and_slide()
 	save_player_data()
 
+	# pushing boxes
 	for i in get_slide_collision_count():
 		var c = get_slide_collision(i)
-		if c.get_collider() is RigidBody2D:
-			c.get_collider().apply_central_impulse(-c.get_normal() * 40.0)
+		var collider = c.get_collider()
+		if collider is Box && global_position.y - 5.0 < collider.global_position.y && global_position.y + 5 > collider.global_position.y:
+			collider.velocity.x = direction * SPEED
 
 func load_player_data():
 	var data = State.get_player_data(player_name)
@@ -101,7 +104,6 @@ func _on_ladder_exited(_area: Area2D):
 		is_climbing = false
 
 func _on_danger_area_entered(_area: Area2D):
-	print_debug("danger")
 	dead = true
 
 func _on_enemy_area_entered(_area:Area2D):

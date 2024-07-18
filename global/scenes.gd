@@ -1,39 +1,54 @@
-extends Node2D
+extends Control
+class_name Scenes
+
+static var singleton: Scenes = null
 
 var last_level_data = LevelData
 
+@onready var center = $Origin
+
+func _ready():
+	singleton = self
+	Scenes.goto_start()
+
 func clear():
-	for child in get_children():
+	for child in center.get_children():
 		child.queue_free()
 
-func goto_start():
-	clear()
+static func goto_start():	
+	singleton.clear()
 	var start = preload("res://scenes/ui/start.tscn").instantiate()
-	add_child(start)
+	singleton.center.add_child(start)
 
-func goto_level_select():
-	clear()
+static func goto_level_select():
+	singleton.clear()
 	var select_level = preload("res://scenes/ui/select_level.tscn").instantiate()
-	add_child(select_level)
+	singleton.center.add_child(select_level)
 
-func goto_credits():
-	clear()
+static func goto_credits():
+	singleton.clear()
 	var credits = preload("res://scenes/ui/credits.tscn").instantiate()
-	add_child(credits)
+	singleton.center.add_child(credits)
 
-func goto_level(level_data: LevelData):
-	last_level_data = level_data
-	clear()
+static func goto_level(level_data: LevelData):
+	singleton.last_level_data = level_data
+	singleton.clear()
 	var level = preload("res://scenes/level.tscn").instantiate()
 	level.level_data = level_data
-	add_child(level)
+	singleton.center.add_child(level)
 
-func restart_last_level():
-	goto_level(last_level_data)
+static func restart_last_level():
+	goto_level(singleton.last_level_data)
 
-func goto_score_screen(level_data: LevelData, this_record: LevelRecord):
-	clear()
+static func goto_score_screen(level_data: LevelData, this_record: LevelRecord):
+	singleton.clear()
 	var score_screen = preload("res://scenes/ui/score_screen.tscn").instantiate()
-	score_screen.level_data = last_level_data
+	score_screen.level_data = singleton.last_level_data
 	score_screen.this_record = this_record
-	add_child(score_screen)
+	singleton.center.add_child(score_screen)
+
+static func goto_pause_screen():
+	singleton.get_tree().paused = true
+	var game_paused = preload("res://scenes/ui/game_paused.tscn").instantiate()
+	singleton.get_tree().current_scene.add_child(game_paused)
+	game_paused.right_panel.level_data = singleton.last_level_data
